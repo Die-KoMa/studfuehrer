@@ -1,0 +1,87 @@
+body {
+    padding-top: 50px;
+}
+nav h1 {
+    margin: 5px;
+}
+.explanation {
+    cursor: help;
+    border-bottom: dashed 1px #000;
+}
+
+.btn-delete:hover, .btn-delete {
+    background-color: rgb(217, 83, 79);
+    border-color: rgb(212, 63, 58);
+    color: #fff;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.125) inset;
+}
+
+.btn-delete.active {
+    background-color: transparent;
+    box-shadow: none;
+    color: inherit;
+}
+
+.btn-delete input[type=checkbox] {
+    display: none;
+}
+.tt-hint {
+    display: none;
+}
+.input-group .twitter-typeahead {
+    display: table-cell !important;
+}
+.new-keyword-group {
+    max-width: 200px;
+}
+.extra-comment {
+    color: gray;
+}
+.border-bottom {
+    border-bottom: 1px lightgray solid;
+    padding: 5px;
+}
+
+table {
+    border-collapse: collapse;
+}
+.scrollable_outer {
+    width: 100%;
+    height: 50%;
+}
+.scrollable_outer td {
+    padding: 0;
+    overflow: hidden;
+    vertical-align: top;
+}
+.scrollable_top_left td {
+    border: 0;
+}
+.scrollable_inner {
+    overflow: hidden;
+}
+.scrollable_bottom_right {
+    overflow: scroll;
+}
+.scrollable_inner table {
+    table-layout: fixed;
+    overflow: hidden;
+    width: 100%;
+}
+.scrollable_inner td, .scrollable_inner th {
+    width: 200px;
+    border: 1px solid #aaa;
+    padding: 5px;
+}
+.scrollable_inner td:first-child, .scrollable_inner th:first-child {
+    border-left: 0;
+}
+.scrollable_inner tr:first-child td, .scrollable_inner tr:first-child th {
+    border-top: 0;
+}
+.scrollable_top_right th, .scrollable_top_left th {
+    border-bottom-width: 2px;
+}
+.scrollable_top_left th, .scrollable_bottom_left td {
+    border-right-width: 2px;
+}

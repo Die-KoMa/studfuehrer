@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ parent() }}
+    <script src="{{siteUrl('public/scrolltable.js')}}"></script>
+    <script>
+        $(function() {
+            fixedHeader('compare_table')
+        });
+    </script>
+{% endblock %}
+{% block container %}
+    <table id="compare_table">
+    <thead>
+        <tr>
+            <th>&nbsp;</th>
+{% for university in universities %}
+            <th><a href="{{urlFor('university', {'id': university.id})}}">{{university.name}}</a></th>
+{% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+{% for question in questions %}
+        <tr>
+            <td>{{question.question}}</td>
+{% for university in universities %}
+{% set answer = question.answers().where('university_id', university.id).findOne() %}
+            <td>
+{% if question.type == constant('Question::TYPE_INTEGER') %}
+                {{answer.value}}
+{% elseif question.type == constant('Question::TYPE_FREETEXT') %}
+                {{answer.freetext}}
+{% elseif question.type == constant('Question::TYPE_BOOLEAN') %}
+                {% if answer.value == "1" %}ja{% elseif answer.value == "0" %}nein{% else %}keine Angabe{% endif %}
+{% elseif question.type == constant('Question::TYPE_TAGS') %}
+                {{answer.tags().findMany()|join_attr('value', ', ')}}
+{% endif %}
+            </td>
+{% endfor %}
+        </tr>
+{% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% for question in filter_questions %}
+                    <div class="row border-bottom">
+                        <label class="col-sm-3">
+                            {{ question.question }}
+                        </label>
+{% if question.type == constant('QUESTION::TYPE_BOOLEAN') %}
+                        <div data-toggle="buttons" class="options col-sm-9" id="options-q{{question.id}}">
+                            <label class="btn btn-default active"><input type="checkbox" name="q{{question.id}}[]" value="-1" checked> keine Angabe</label>
+                            <label class="btn btn-default active"><input type="checkbox" name="q{{question.id}}[]" value="0" checked> Nein</label>
+                            <label class="btn btn-default active"><input type="checkbox" name="q{{question.id}}[]" value="1" checked> Ja</label>
+                        </div>
+{% elseif question.type == constant('Question::TYPE_TAGS') %}
+                        <div data-toggle="buttons" class="options col-sm-9" id="options-q{{question.id}}">
+{% for tag in question.tags().findMany() %}
+                            <label class="btn btn-default active"><input type="checkbox" name="q{{question.id}}[]" value="{{tag.id}}" checked> {{tag.value}}</label>
+{% endfor %}
+                        </div>
+{% endif %}
+                    </div>
+{% endfor %}

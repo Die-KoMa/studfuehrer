@@ -1,0 +1,10 @@
+{
+    "name": "koma/studfuehrer",
+    "description": "Vergleich mehrerer Universitäten in diversen Kriterien auf übersichtliche Weise, mit Update-Möglichkeiten für die Hochschulen selbst",
+    "require": {
+        "slim/slim": ">=2.3",
+        "j4mie/paris": "1.4.*",
+        "twig/twig": "1.*",
+        "slim/views": "0.1.*"
+    }
+}

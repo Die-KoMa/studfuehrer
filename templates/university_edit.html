@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block head %}
+{{ parent() }}
+    <script>
+        outstanding_tag_ids = 0;
+        submit_form = false;
+        function add_tag(id) {
+            var tagtext = $('#q' + id + '_add');
+            if(tagtext.val() == "")
+                return false;
+            outstanding_tag_ids += 1;
+            $.ajax({
+                url: "{{siteUrl('/question/')}}" + id + "/get_tag_id",
+                type: "POST",
+                data: {tag: tagtext.val()},
+                success: function(data) {
+                    var already_present = $('[name="q' + id + '[]"][value=' + data + ']').length;
+                    if(!already_present) {
+                        var appender = $('<label class="btn btn-default btn-delete active"><input type="checkbox" name="q' + id + '[]" value="' + data + '" checked> ' + tagtext.val() + '</label>');
+                        $('#q' + id + '_tags').append(appender).append("\n");
+                    }
+                    tagtext.val('');
+                },
+                complete: function() {
+                    outstanding_tag_ids -= 1;
+                    if(outstanding_tag_ids == 0 && submit_form)
+                        submit_main_edit_form();
+                }
+            });
+            return true;
+        }
+        function prepare_submit_main_edit_form() {
+            submit_form = true;
+            var adding = false;
+            $('.add-tag-input').each(function(index, elem) {
+                if(add_tag($(elem).data('question')))
+                    adding = true;
+            });
+            if(adding) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        function submit_main_edit_form() {
+            $('#main_edit_form').submit();
+        }
+        function on_unload(e) {
+            if(!submit_form)
+                e.preventDefault();
+        }
+        $(function() {
+            $('.add-tag-input').on('keydown', function(e) {
+                if(e.keyCode == 13) {
+                    add_tag($(this).data('question'));
+                }
+            });
+            $('.new-keyword-group .btn').on('click', function() {
+                add_tag($(this).data('question'));
+            });
+            $('#main_edit_form').on('submit', prepare_submit_main_edit_form);
+        });
+        $(window).on("beforeunload", on_unload)
+        $(window).on("unload", on_unload)
+    </script>
+{% endblock %}
+{% block navigation %}
+            <li><button role="submit" class="btn btn-danger navbar-btn" onclick="submit_main_edit_form()">Speichern</button></li>
+{% endblock %}
+{% block content %}
+    <h2>{{university.name}} <span class="small">bearbeiten</span></h2>
+    <form method="post" id="main_edit_form">
+{% for category in categories %}
+    <h3>{{category.name}}</h3>
+{% for question in category.questions().orderByAsc('order').findMany() %}
+{% set answer = question.answers().where('university_id', university.id).findOne() %}
+    <div class="row border-bottom">
+        <span class="col-sm-3"><label for="q{{question.id}}">{{question.question}}:</label>
+        <span class="help-block">{{question.explanation}}</span>
+        </span>
+{% if question.type == constant('Question::TYPE_FREETEXT') %}
+        <span class="col-sm-9">
+            <input type="hidden" name="q{{question.id}}" value="dummy">
+            <textarea name="q{{question.id}}_freetext" id="q{{question.id}}" class="form-control" rows="5">{{answer.freetext}}</textarea>
+{% else %}
+        <span class="col-sm-5">
+{% if question.type == constant('Question::TYPE_BOOLEAN') %}
+            <label style="font-weight: normal"><input type="radio" name="q{{question.id}}" value=""{% if answer.value == null %} checked{% endif %}> keine Angabe</label>
+            <label style="font-weight: normal"><input type="radio" name="q{{question.id}}" value="0"{% if answer.value == "0" %} checked{% endif %}> nein</label>
+            <label style="font-weight: normal"><input type="radio" name="q{{question.id}}" value="1"{% if answer.value == "1" %} checked{% endif %}> ja</label>
+{% elseif question.type == constant('Question::TYPE_INTEGER') %}
+            <input type="number" name="q{{question.id}}" value="{{answer.value}}" pattern="\d*" min="0" class="form-control">
+{% elseif question.type == constant('Question::TYPE_TAGS') %}
+            <div data-toggle="buttons" id="q{{question.id}}_tags">
+{% for tag in answer.tags().findMany() %}
+                <label class="btn btn-default btn-delete active">
+                    <input type="checkbox" name="q{{question.id}}[]" value="{{tag.id}}" checked> {{tag.value}}
+                </label>
+{% endfor %}
+            </div>
+            <span class="input-group new-keyword-group">
+                <input type="text" placeholder="Neues Schlagwort" class="form-control add-tag-input" data-question="{{question.id}}" id="q{{question.id}}_add">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-question="{{question.id}}">+</button>
+                </span>
+            </span>
+            <script>
+                $('#q{{question.id}}_add').typeahead({
+                    name: 'q{{question.id}}',
+                    local: [{% for tag in question.tags().findMany() %}{# TODO: exclude already added tags #}'{{tag.value}}',{% endfor %}],
+                });
+            </script>
+{% endif %}
+        </span>
+        <span class="col-sm-4">
+            <textarea name="q{{question.id}}_freetext" id="q{{question.id}}" placeholder="Optionaler Kommentar. Bitte kurz fassen, nach diesen Infos kann man nicht filtern!" class="form-control" rows="5">{{answer.freetext}}</textarea>
+{% endif %}
+        </span>
+    </div>
+{% endfor %}
+{% endfor %}
+    </form>
+{% endblock %}

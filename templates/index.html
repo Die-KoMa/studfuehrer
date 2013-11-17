@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+    <p class="lead">Willkommen auf den Seiten des Studienführers Mathematik, einem Projekt
+    der <a href="http://die-koma.org">KoMa</a>!</p>
+
+    <h2>Was ist das?</h2>
+    <p>Hier versuchen <span class="explanation"
+    title="fachspezifische Studierendenvertretungen">Fachschaften</span>
+    verschiedener Universitäten, möglichst objektive Informationen zum
+    Mathematik-Studium an ihrer Universität bereit zu stellen. Diese
+    Informationen kannst du teilweise nutzen, um nach Universitäten zu filtern
+    (Klicke oben auf „Filtern”), teilweise sind sie nicht maschinenlesbar und daher
+    nur von dir selbst verarbeitbar. Probiers einfach mal aus, oder guck dir
+    die <a href="{{urlFor('filter')}}">Übersicht über alle Universitäten</a>
+    an!</p>
+
+    <h2>Wie kam es dazu?</h2>
+    <p>Der Studienführer entstand, weil Mathematik-Studierende vieler
+    Universitäten mit vorhandenen Möglichkeiten der Information über
+    Studienbedingungen unzufrieden waren. Während Rankings Interessierten ihr
+    Bewertungsschema aufzwingen ist die eigenhändige Informationssammlung von
+    den Universitätshomepages eine Zumutung (siehe auch den leider wahren <a
+    href="http://xkcd.com/773/">xkcd-Comic</a> zum Thema).</p>
+
+    <p>Diese Webseite soll daher einen Mittelweg bieten: Von Frewilligen
+    Studierenden der jeweiligen Universität werden Eckdaten und relevante
+    Informationen zusammengetragen, sodass man sich informieren kann, ohne
+    dabei selbst pro Universität ein Dutzend Webseiten durchsuchen zu müssen.
+    Die Filterfunktion soll dabei helfen, eine Vorauswahl zu treffen, welche
+    Universitäten überhaupt in Frage kommen.</p>
+
+    <h2>Wie werden die Informationen aktualisiert?</h2>
+    <p>Der Eintrag einer Universität kann nur von der entsprechenden Fachschaft
+    geändert werden. Dazu haben wir den uns bekannten Fachschaften Links
+    geschickt. Wenn dieser Link verloren gegangen ist oder eure Universität
+    noch gar nicht vorhanden ist, schreibt uns einfach eine E-Mail an
+    <a href="mailto:homepage@die-koma.org">homepage@die-koma.org</a> damit wir
+    euch einen neuen Link zuschicken können.</p>
+{% endblock %}

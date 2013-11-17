@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>{{university.name}}</h2>
+{% for category in categories %}
+        <h3>{{category.name}}</h3>
+{% for question in category.questions().orderByAsc('order').findMany() %}
+            <div class="row" style="border-bottom: 1px lightgray solid; padding: 5px;">
+                <span class="col-sm-3" style="font-weight: bold;">{{question.question}}:</span>
+                <span class="col-sm-9">
+{% set answer = question.answers().where('university_id', university.id).findOne() %}
+{% if question.type == constant('Question::TYPE_FREETEXT') %}
+                    {{answer.freetext}}
+{% else %}
+{% if question.type == constant('Question::TYPE_INTEGER') %}
+                    {{answer.value}}
+{% elseif question.type == constant('Question::TYPE_BOOLEAN') %}
+                    {% if answer.value == "1" %}ja{% elseif answer.value == "0" %}nein{% else %}keine Angabe{% endif %}
+{% elseif question.type == constant('Question::TYPE_TAGS') %}
+                    {{answer.tags().findMany()|join_attr('value', ', ')}}
+{% endif %}
+{% if answer.freetext != "" %}
+                    <div class="extra-comment">{{answer.freetext}}</div>
+{% endif %}
+{% endif %}
+                </span>
+            </div>
+{% endfor %}
+{% endfor %}
+{% endblock %}

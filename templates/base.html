@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+{% block head %}
+    <title>{% block title %}{% endblock %}Studienführer Mathematik</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{siteUrl('/public/typeahead.js-bootstrap.css')}}">
+    <link rel="stylesheet" href="{{siteUrl('/public/style.css')}}">
+    <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/typeahead.js/0.9.3/typeahead.min.js"></script>
+{% endblock %}
+</head>
+<body data-spy="scroll" data-target="#navbar">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="navbar">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <h1><a href="{{baseUrl()}}">Studienführer Mathematik</a></h1>
+    </div>
+  
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+{% block navigation %}
+            <li><button role="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#filters">Filtern</button></li>
+{% endblock %}
+            <li><a href="/impressum">Impressum</a></li>
+        </ul>
+    </div>
+</nav>
+<div id="filters" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="filtersLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{urlFor('filter')}}" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="filtersLabel">Filter</h4>
+                </div>
+                <div class="modal-body" id="filters">
+{% include "filters.html" %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-primary">Anwenden</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+{% block container %}
+<main class="container">
+{% block content %}{% endblock %}
+</main>
+{% endblock %}
+</body>
+</html>
