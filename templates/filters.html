@@ -1,3 +1,32 @@
+                    <script>
+                        function show_slider(e) {
+                            var slider = $('#q' + e.data.qid + '_slider');
+                            var pos = $(this).position();
+                            var input = this;
+                            var range = $('input[type=range]', slider);
+                            if(this.value == '+∞' || this.value == '∞')
+                                range.val(range.get(0).max);
+                            else if(this.value == '-∞')
+                                range.val(range.get(0).min);
+                            else
+                                range.val(this.value);
+                            slider.removeClass('hidden');
+                            slider.css('top', (pos.top + $(this).css('height')));
+                            slider.css('left', (pos.left + (parseInt($(this).css('width')) - parseInt(slider.css('width'))) / 2) + 'px');
+                            $('input', slider).data('input', this);
+                        }
+
+                        function slider_changed(e) {
+                            $($(this).data('input')).val(this.value);
+                        }
+
+                        function hide_slider(e) {
+                            setTimeout(function() {
+                                if(document.activeElement.id.indexOf('q' + e.data.qid + '_') != 0)
+                                    $('#q' + e.data.qid + '_slider').addClass('hidden');
+                            }, 1);
+                        }
+                    </script>
 {% for question in filter_questions %}
                     <div class="row border-bottom">
                         <label class="col-sm-3">
@@ -15,6 +44,27 @@
                             <label class="btn btn-default active"><input type="checkbox" name="q{{question.id}}[]" value="{{tag.id}}" checked> {{tag.value}}</label>
 {% endfor %}
                         </div>
+{% elseif question.type == constant('Question::TYPE_INTEGER') %}
+{% set qmin = question.answers().min('value') // 1 %}
+{% set qmax = question.answers().max('value') // 1 %}
+                        <div class="col-sm-9 filter_integer">
+                            von <input type="text" class="form-control" name="q{{question.id}}[min]" id="q{{question.id}}_min" value="{{qmin}}" pattern="[-+]?(&infin;|\d+)" size="3" style="width: auto; display: inline;">
+                            bis <input type="text" class="form-control" name="q{{question.id}}[max]" id="q{{question.id}}_max" value="{{qmax}}" pattern="[-+]?(&infin;|\d+)" size="3" style="width: auto; display: inline;">
+                            <div id="q{{question.id}}_slider" class="hidden modal-content">
+                                <input type="button" class="btn btn-default" id="q{{question.id}}_min_button" value="-&infin;">
+                                {{qmin}} <input type="range" id="q{{question.id}}_slider" min="{{qmin}}" max="{{qmax}}"> {{qmax}}
+                                <input type="button" class="btn btn-default" id="q{{question.id}}_max_button" value="+&infin;">
+                            </div>
+                        </div>
+                        <script>
+                            $('#q{{question.id}}_min').on('focus', {qid: {{question.id}}}, show_slider);
+                            $('#q{{question.id}}_max').on('focus', {qid: {{question.id}}}, show_slider);
+                            $('#q{{question.id}}_slider input').on('change', slider_changed);
+                            $('#q{{question.id}}_slider input').on('blur', {qid: {{question.id}}}, hide_slider);
+                            $('#q{{question.id}}_slider input').on('click', slider_changed);
+                            $('#q{{question.id}}_min').on('blur', {qid: {{question.id}}}, hide_slider);
+                            $('#q{{question.id}}_max').on('blur', {qid: {{question.id}}}, hide_slider);
+                        </script>
 {% endif %}
                     </div>
 {% endfor %}

@@ -42,6 +42,14 @@ nav h1 {
     padding: 5px;
 }
 
+.filter_integer div {
+    position: absolute;
+    padding: 10px;
+}
+.filter_integer input[type=range] {
+    margin-bottom: -3px;
+}
+
 table {
     border-collapse: collapse;
 }

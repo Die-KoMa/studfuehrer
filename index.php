@@ -71,6 +71,15 @@ $app->map('/filter', function() use ($app) {
                 case Question::TYPE_BOOLEAN:
                     $universities = $universities->where_in('q' . $question->id . '.value', $filterval);
                     break;
+                case Question::TYPE_INTEGER:
+                    if(is_array($filterval)) {
+                        if(isset($filterval['min']) && $filterval['min'] != '-∞')
+                            $universities = $universities->where_gte('q' . $question->id . '.value', intval($filterval['min']));
+                        if(isset($filterval['max']) && $filterval['max'] != '∞' && $filterval['max'] != '+∞')
+                            $universities = $universities->where_lte('q' . $question->id . '.value', intval($filterval['max']));
+                    }
+                    break;
+
             }
         }
     }
