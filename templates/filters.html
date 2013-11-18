@@ -26,20 +26,33 @@
                                     $('#q' + e.data.qid + '_slider').addClass('hidden');
                             }, 1);
                         }
+
+                        function set_all_checkboxes(qid, checked) {
+                            $('[name="q' + qid + '[]"]').each(function(idx, elem) {
+                                if(elem.checked != checked)
+                                    $(elem).parent().button('toggle');
+                            });
+                        }
                     </script>
 {% for question in filter_questions %}
                     <div class="row border-bottom">
-                        <label class="col-sm-3">
-                            {{ question.question }}
-                        </label>
+                        <div class="col-sm-4">
+                            <label>{{ question.question }}</label>
+{% if question.type == constant('QUESTION::TYPE_TAGS') %}
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-xs" onclick="set_all_checkboxes({{question.id}}, true)">Alle</button>
+                                <button type="button" class="btn btn-default btn-xs" onclick="set_all_checkboxes({{question.id}}, false)">Keine</button>
+                            </div>
+{% endif %}
+                        </div>
 {% if question.type == constant('QUESTION::TYPE_BOOLEAN') %}
-                        <div data-toggle="buttons" class="options col-sm-9" id="options-q{{question.id}}">
+                        <div data-toggle="buttons" class="options col-sm-8" id="options-q{{question.id}}">
                             <label class="btn btn-default active"><input type="checkbox" name="q{{question.id}}[]" value="-1" checked> keine Angabe</label>
                             <label class="btn btn-default active"><input type="checkbox" name="q{{question.id}}[]" value="0" checked> Nein</label>
                             <label class="btn btn-default active"><input type="checkbox" name="q{{question.id}}[]" value="1" checked> Ja</label>
                         </div>
 {% elseif question.type == constant('Question::TYPE_TAGS') %}
-                        <div data-toggle="buttons" class="options col-sm-9" id="options-q{{question.id}}">
+                        <div data-toggle="buttons" class="options col-sm-8" id="options-q{{question.id}}">
 {% for tag in question.tags().findMany() %}
                             <label class="btn btn-default active"><input type="checkbox" name="q{{question.id}}[]" value="{{tag.id}}" checked> {{tag.value}}</label>
 {% endfor %}
@@ -47,7 +60,7 @@
 {% elseif question.type == constant('Question::TYPE_INTEGER') %}
 {% set qmin = question.answers().min('value') // 1 %}
 {% set qmax = question.answers().max('value') // 1 %}
-                        <div class="col-sm-9 filter_integer">
+                        <div class="col-sm-8 filter_integer">
                             von <input type="text" class="form-control" name="q{{question.id}}[min]" id="q{{question.id}}_min" value="{{qmin}}" pattern="[-+]?(&infin;|\d+)" size="3" style="width: auto; display: inline;">
                             bis <input type="text" class="form-control" name="q{{question.id}}[max]" id="q{{question.id}}_max" value="{{qmax}}" pattern="[-+]?(&infin;|\d+)" size="3" style="width: auto; display: inline;">
                             <div id="q{{question.id}}_slider" class="hidden modal-content">

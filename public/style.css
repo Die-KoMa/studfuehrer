@@ -49,6 +49,23 @@ nav h1 {
 .filter_integer input[type=range] {
     margin-bottom: -3px;
 }
+#filters .modal-dialog {
+    width: auto;
+    padding: 10px;
+}
+#filters .options .btn {
+    padding: 4px 8px;
+}
+@media screen and (min-width: 1200px) {
+    #filters .modal-body {
+        -moz-columns: 2;
+        -webkit-columns: 2;
+        columns: 2;
+        -moz-column-gap: 40px;
+        -webkit-column-gap: 40px;
+        column-gap: 40px;
+    }
+}
 
 table {
     border-collapse: collapse;
