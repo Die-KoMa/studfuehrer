@@ -41,6 +41,14 @@ nav h1 {
     border-bottom: 1px lightgray solid;
     padding: 5px;
 }
+.updated-icon {
+    color: #e0e0e0;
+    cursor: default;
+    float: right;
+}
+.updated-icon.outdated {
+    color: red;
+}
 
 .filter_integer div {
     position: absolute;

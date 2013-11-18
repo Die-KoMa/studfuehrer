@@ -1,13 +1,17 @@
 {% extends "base.html" %}
+{% set reference_date = "now"|date_modify("-1 year") %}
 {% block content %}
-    <h2>{{university.name}}</h2>
+    <h2>{{university.name}} <span class="updated-icon glyphicon glyphicon-time{% if university.updated|date_modify("+0") < reference_date %} outdated{% endif %}" title="Zuletzt aktualisiert am {{university.updated|date('d.m.Y')}}"></span></h2>
 {% for category in categories %}
         <h3>{{category.name}}</h3>
 {% for question in category.questions().orderByAsc('order').findMany() %}
-            <div class="row" style="border-bottom: 1px lightgray solid; padding: 5px;">
-                <span class="col-sm-3" style="font-weight: bold;">{{question.question}}:</span>
-                <span class="col-sm-9">
 {% set answer = question.answers().where('university_id', university.id).findOne() %}
+            <div class="row" style="border-bottom: 1px lightgray solid; padding: 5px;">
+                <span class="col-sm-3" style="font-weight: bold;">
+                    <span class="updated-icon glyphicon glyphicon-time{% if answer.updated|date_modify("+0") < reference_date %} outdated{% endif %}" title="Zuletzt aktualisiert am {{answer.updated|date('d.m.Y')}}"></span>
+                    {{question.question}}:
+                </span>
+                <span class="col-sm-9">
 {% if question.type == constant('Question::TYPE_FREETEXT') %}
                     {{answer.freetext}}
 {% else %}

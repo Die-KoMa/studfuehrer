@@ -96,6 +96,8 @@ $app->get('/university/:id', function($id) use ($app) {
     if(!$university instanceof University) {
         $app->notFound();
     }
+    // Idiorm doesn't handle MAX() on timestamp columns correctly (because the result is casted to int), thus we have to make the query manually
+    $university->updated = ORM::for_table('Answer')->raw_query("SELECT MAX(`updated`) AS `updated` FROM `answer` WHERE `university_id` = '" . $university->id . "'")->findOne()->updated;
     $categories = Category::orderByAsc('order')->findMany();
     $app->render('university.html', array(
         'university' => $university,
