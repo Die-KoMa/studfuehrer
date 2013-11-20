@@ -53,6 +53,7 @@ nav h1 {
 .filter_integer div {
     position: absolute;
     padding: 10px;
+    z-index: 99;
 }
 .filter_integer input[type=range] {
     margin-bottom: -3px;
