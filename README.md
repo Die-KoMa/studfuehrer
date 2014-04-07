@@ -14,10 +14,15 @@ Benötigt wird eine MySQL-Datenbank, deren Zugangsdaten in der Datei
 finden). Außerdem wird die in `empty.sql.gz` gespeicherte Datenbankstruktur
 erwartet.
 
-Ferner werden die Frameworks [Slim](http://slimframework.com/), [Idiorm,
-Paris](http://j4mie.github.io/idiormandparis/) und [Twig](twig.sensiolabs.org/)
+Ferner werden die Frameworks [Slim], [Idiorm, Paris] und [Twig]
 benötigt, die sich am einfachsten mit dem PHP-Paketmanager Composer
 installieren lassen:
 
-    curl -s https://getcomposer.org/installer | php
-    php composer.phar install
+```bash
+curl -s https://getcomposer.org/installer | php
+php composer.phar install
+```
+
+[Slim]: http://slimframework.com/
+[Idiorm, Paris]: http://j4mie.github.io/idiormandparis/
+[Twig]: http://twig.sensiolabs.org/
