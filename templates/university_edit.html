@@ -14,7 +14,7 @@
                 type: "POST",
                 data: {tag: tagtext.val()},
                 success: function(data) {
-                    var already_present = $('[name="q' + id + '[]"][value=' + data + ']').length;
+                    var already_present = $('#q' + id + '_tags [name="q' + id + '[]"][value=' + data + ']').length;
                     if(!already_present) {
                         var appender = $('<label class="btn btn-default btn-delete active"><input type="checkbox" name="q' + id + '[]" value="' + data + '" checked> ' + tagtext.val() + '</label>');
                         $('#q' + id + '_tags').append(appender).append("\n");
