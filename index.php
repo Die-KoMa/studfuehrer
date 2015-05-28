@@ -83,7 +83,7 @@ $app->map('/filter', function() use ($app) {
             }
         }
     }
-    $universities = $universities->select('university.*')->findMany();
+    $universities = $universities->distinct()->select('university.*')->findMany();
     $questions = Question::findMany();
     $app->render('filter.html', array(
         'universities' => $universities,
